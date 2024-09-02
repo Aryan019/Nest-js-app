@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { AppService } from 'src/app.service';
-import { CreateTodo } from './todo.dto';
+import { CreateTodo, UpdateTodo } from './todo.dto';
 
 @Controller('todo')
 export class TodoController {
@@ -30,7 +30,8 @@ createPost(@Body() data: CreateTodo){
         // Spreading the data
         ...data,
 
-        createdAt: new Date().toLocaleString()
+        createdAt: new Date().toLocaleString(),
+        isComplete: false,
     }
 
     this.todos.push(item)
@@ -47,6 +48,32 @@ getAllTodos(){
         todos : this.todos,
         length: this.todos.length,
         msg : "All the movies are listed above "
+    }
+
+}
+
+
+@Put('/update/:id')
+updateTodos(@Param('id') id:number, @Body() data:UpdateTodo){
+
+    const new_todos = this.todos.map((curr,i)=>{
+        if(curr.id==id){
+            return {
+                ...curr,
+                ['title'] : data.title,
+                isComplete : true
+            }
+        }
+        return curr
+    })
+
+    this.todos = new_todos
+    return{
+        msg : "todo is updated bro"
+    }
+
+    return {
+        id
     }
 
 }
