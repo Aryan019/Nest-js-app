@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { AppService } from 'src/app.service';
 import { CreateTodo, UpdateTodo } from './todo.dto';
 
@@ -77,6 +77,18 @@ updateTodos(@Param('id') id:number, @Body() data:UpdateTodo){
     }
 
 }
+
+@Delete('/delete/:id')
+deleteToDo(@Param('id') id:number){
+
+    const new_todos = this.todos.filter((c)=>c.id != id)
+    this.todos = new_todos
+
+    return {
+        msg : "Deletion is done "
+    }
+}
+
 
 
 
